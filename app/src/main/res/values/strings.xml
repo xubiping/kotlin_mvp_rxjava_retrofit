@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Monster M</string>
+    <string name="facebook_app_id">649566053147477</string>
+    <string name="fb_login_protocol_scheme">fb649566053147477</string>
+    <string name="fb_senderid">1111111111111</string>
+    <string name="appsf_dev_key">hwt9m9RDe4EjQwcRhz8xUZ</string>
+
+</resources>
