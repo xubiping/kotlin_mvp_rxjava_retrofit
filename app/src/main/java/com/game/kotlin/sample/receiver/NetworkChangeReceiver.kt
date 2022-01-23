@@ -3,6 +3,10 @@ package com.game.kotlin.sample.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.game.kotlin.sample.constant.Constant
+import com.game.kotlin.sample.event.NetworkChangeEvent
+import com.game.kotlin.sample.utils.NetWorkUtil
+import com.game.kotlin.sample.utils.Preference
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -10,23 +14,22 @@ import org.greenrobot.eventbus.EventBus
  * @author:  xubp
  * @date :   2022/1/23 11:04
  */
-class NetworkChangeReceiver {
-    class NetworkChangeReceiver : BroadcastReceiver() {
+class NetworkChangeReceiver : BroadcastReceiver() {
 
-        /**
-         * 缓存上一次的网络状态
-         */
-        private var hasNetwork: Boolean by Preference(Constant.HAS_NETWORK_KEY, true)
+    /**
+     * 缓存上一次的网络状态
+     */
+    private var hasNetwork: Boolean by Preference(Constant.HAS_NETWORK_KEY, true)
 
-        override fun onReceive(context: Context, intent: Intent) {
-            val isConnected = NetWorkUtil.isNetworkConnected(context)
-            if (isConnected) {
-                if (isConnected != hasNetwork) {
-                    EventBus.getDefault().post(NetworkChangeEvent(isConnected))
-                }
-            } else {
+    override fun onReceive(context: Context, intent: Intent) {
+        val isConnected = NetWorkUtil.isNetworkConnected(context)
+        if (isConnected) {
+            if (isConnected != hasNetwork) {
                 EventBus.getDefault().post(NetworkChangeEvent(isConnected))
             }
+        } else {
+            EventBus.getDefault().post(NetworkChangeEvent(isConnected))
         }
-
     }
+
+}

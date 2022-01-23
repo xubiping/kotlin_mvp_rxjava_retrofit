@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListAdapter
 import com.cxz.wanandroid.R
 import com.cxz.wanandroid.base.BaseActivity
+import com.ninering.rocen.an.R
 import kotlinx.android.synthetic.main.item_icon_listpreference.view.*
 import kotlinx.android.synthetic.main.item_icon_listpreference_preview.view.*
 import java.util.*

@@ -7,6 +7,8 @@ import android.view.View
 import com.afollestad.materialdialogs.color.CircleView
 import com.cxz.wanandroid.R
 import com.cxz.wanandroid.utils.SettingUtil
+import com.game.kotlin.sample.utils.SettingUtil
+import com.ninering.rocen.an.R
 
 /**
  * @description:

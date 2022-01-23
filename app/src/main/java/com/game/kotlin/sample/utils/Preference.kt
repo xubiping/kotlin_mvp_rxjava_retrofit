@@ -3,6 +3,7 @@ package com.game.kotlin.sample.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import com.game.kotlin.sample.app.App
 import java.io.*
 import kotlin.reflect.KProperty
 

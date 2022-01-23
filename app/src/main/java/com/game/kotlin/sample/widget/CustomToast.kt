@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.ninering.rocen.an.R
 
 /**
  * @description:

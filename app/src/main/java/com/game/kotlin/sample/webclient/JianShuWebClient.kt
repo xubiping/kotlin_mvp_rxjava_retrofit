@@ -4,6 +4,7 @@ import android.content.Context
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import com.game.kotlin.sample.utils.StringUtil
+import com.game.kotlin.sample.utils.Wget
 import java.io.ByteArrayInputStream
 import java.util.regex.Pattern
 

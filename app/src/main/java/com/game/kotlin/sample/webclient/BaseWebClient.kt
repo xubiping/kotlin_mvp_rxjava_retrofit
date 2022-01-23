@@ -6,6 +6,7 @@ import android.net.http.SslError
 import android.os.Build
 import android.webkit.*
 import androidx.annotation.RequiresApi
+import com.game.kotlin.sample.ext.loge
 
 /**
  * @description:

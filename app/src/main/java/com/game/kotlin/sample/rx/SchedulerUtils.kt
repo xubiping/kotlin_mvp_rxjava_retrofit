@@ -1,5 +1,7 @@
 package com.game.kotlin.sample.rx
 
+import com.game.kotlin.sample.rx.scheduler.IoMainScheduler
+
 /**
  * @description:
  * @author:  xubp

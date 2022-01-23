@@ -2,6 +2,7 @@ package com.game.kotlin.sample.widget.helper
 
 import android.os.Build
 import android.widget.LinearLayout
+import com.game.kotlin.sample.utils.DisplayManager
 import com.google.android.material.tabs.TabLayout
 import java.lang.reflect.Field
 
