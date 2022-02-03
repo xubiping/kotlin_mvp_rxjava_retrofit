@@ -1,5 +1,6 @@
 package com.game.kotlin.sample.ext
 
+import com.game.kotlin.sample.R
 import com.game.kotlin.sample.app.App
 import com.game.kotlin.sample.base.IModel
 import com.game.kotlin.sample.base.IView
@@ -9,7 +10,6 @@ import com.game.kotlin.sample.http.function.RetryWithDelay
 import com.game.kotlin.sample.mvp.model.bean.BaseBean
 import com.game.kotlin.sample.rx.SchedulerUtils
 import com.game.kotlin.sample.utils.NetWorkUtil
-import com.ninering.rocen.an.R
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable

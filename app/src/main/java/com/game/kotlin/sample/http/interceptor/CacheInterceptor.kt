@@ -1,5 +1,7 @@
 package com.game.kotlin.sample.http.interceptor
 
+import com.game.kotlin.sample.app.App
+import com.game.kotlin.sample.utils.NetWorkUtil
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.Response

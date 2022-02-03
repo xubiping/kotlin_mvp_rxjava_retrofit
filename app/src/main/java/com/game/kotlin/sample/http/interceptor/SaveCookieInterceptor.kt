@@ -1,5 +1,6 @@
 package com.game.kotlin.sample.http.interceptor
 
+import com.game.kotlin.sample.constant.HttpConstant
 import okhttp3.Interceptor
 import okhttp3.Response
 

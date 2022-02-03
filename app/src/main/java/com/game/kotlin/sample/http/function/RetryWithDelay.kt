@@ -1,6 +1,7 @@
 package com.game.kotlin.sample.http.function
 
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function
 import retrofit2.HttpException
 import java.net.ConnectException

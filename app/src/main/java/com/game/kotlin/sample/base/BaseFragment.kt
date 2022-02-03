@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.game.kotlin.sample.app.App
 import com.game.kotlin.sample.constant.Constant
+import com.game.kotlin.sample.event.NetworkChangeEvent
+import com.game.kotlin.sample.multipleview.MultipleStatusView
 import com.game.kotlin.sample.utils.Preference
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe

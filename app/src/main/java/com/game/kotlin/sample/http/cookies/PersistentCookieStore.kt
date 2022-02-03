@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.text.TextUtils
 import android.util.Log
+import com.game.kotlin.sample.app.App
 import okhttp3.Cookie
 import okhttp3.HttpUrl
 import java.io.*

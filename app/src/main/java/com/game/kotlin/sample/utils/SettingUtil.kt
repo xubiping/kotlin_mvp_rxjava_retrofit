@@ -2,6 +2,8 @@ package com.game.kotlin.sample.utils
 
 import android.graphics.Color
 import android.preference.PreferenceManager
+import com.game.kotlin.sample.R
+import com.game.kotlin.sample.app.App
 
 /**
  * @description:

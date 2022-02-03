@@ -8,6 +8,14 @@ import android.os.Environment
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
+import com.chad.library.BuildConfig
+import com.game.kotlin.sample.R
+import com.game.kotlin.sample.constant.Constant
+import com.game.kotlin.sample.ext.showToast
+import com.game.kotlin.sample.mvp.model.bean.UserInfoBody
+import com.game.kotlin.sample.utils.CommonUtil
+import com.game.kotlin.sample.utils.DisplayManager
+import com.game.kotlin.sample.utils.SettingUtil
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy

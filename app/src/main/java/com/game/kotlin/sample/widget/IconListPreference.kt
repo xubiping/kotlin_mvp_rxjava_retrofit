@@ -10,11 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListAdapter
-import com.cxz.wanandroid.R
-import com.cxz.wanandroid.base.BaseActivity
-import com.ninering.rocen.an.R
-import kotlinx.android.synthetic.main.item_icon_listpreference.view.*
-import kotlinx.android.synthetic.main.item_icon_listpreference_preview.view.*
+import com.game.kotlin.sample.R
 import java.util.*
 
 /**
@@ -40,17 +36,17 @@ class IconListPreference(context: Context, attrs: AttributeSet) : ListPreference
             drawableList.add(d)
         }
 
-        widgetLayoutResource = R.layout.item_icon_listpreference_preview
+        //widgetLayoutResource = R.layout.item_icon_listpreference_preview
     }
 
-    private fun createListAdapter(): ListAdapter {
+    /*private fun createListAdapter(): ListAdapter {
         val selectedValue = value
         val selectedIndex = findIndexOfValue(selectedValue)
         return IconArrayAdapter(
             context, R.layout.item_icon_listpreference,
             entries, drawableList, selectedIndex
         )
-    }
+    }*/
 
 
     override fun onBindView(view: View) {
@@ -60,13 +56,13 @@ class IconListPreference(context: Context, attrs: AttributeSet) : ListPreference
         val selectedIndex = findIndexOfValue(selectedValue)
 
         val drawable = drawableList[selectedIndex]
-        view.run {
+       /* view.run {
             iv_preview.setImageDrawable(drawable)
-        }
+        }*/
     }
 
     override fun onPrepareDialogBuilder(builder: AlertDialog.Builder) {
-        builder.setAdapter(createListAdapter(), this)
+     //   builder.setAdapter(createListAdapter(), this)
         builder.setNegativeButton(context.getString(R.string.cancel)) { dialog, which -> dialog.dismiss() }
         super.onPrepareDialogBuilder(builder)
     }
@@ -85,7 +81,7 @@ class IconListPreference(context: Context, attrs: AttributeSet) : ListPreference
             this.list = imageDrawables
         }
 
-        @SuppressLint("ViewHolder")
+        /*@SuppressLint("ViewHolder")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val inflater = (context as BaseActivity).layoutInflater
             val view = inflater.inflate(R.layout.item_icon_listpreference, parent, false)
@@ -97,6 +93,6 @@ class IconListPreference(context: Context, attrs: AttributeSet) : ListPreference
                 icon.setImageDrawable(list!![position])
             }
             return view
-        }
+        }*/
     }
 }

@@ -13,7 +13,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.drawerlayout.widget.DrawerLayout
-import com.ninering.rocen.an.R
+import com.game.kotlin.sample.R
 
 /**
  * @description:

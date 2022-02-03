@@ -8,8 +8,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
-import com.cxz.wanandroid.R
-import com.ninering.rocen.an.R
+import com.game.kotlin.sample.R
 
 /**
  * @description:

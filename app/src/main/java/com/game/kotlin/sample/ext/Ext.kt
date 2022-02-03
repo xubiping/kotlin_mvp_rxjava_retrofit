@@ -12,7 +12,10 @@ import android.widget.Checkable
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.cxz.swipelibrary.BuildConfig
+import com.game.kotlin.sample.R
 import com.game.kotlin.sample.app.App
+import com.game.kotlin.sample.widget.CustomToast
 import com.google.android.material.snackbar.Snackbar
 import com.just.agentweb.AgentWeb
 import com.just.agentweb.DefaultWebClient
@@ -59,11 +62,11 @@ fun Activity.showSnackMsg(msg: String) {
 
 fun Fragment.showSnackMsg(msg: String) {
     this.activity ?: return
-    val snackbar = Snackbar.make(this.activity!!.window.decorView, msg, Snackbar.LENGTH_SHORT)
+   /* val snackbar = Snackbar.make(this.activity!!.window.decorView, msg, Snackbar.LENGTH_SHORT)
     val view = snackbar.view
     view.findViewById<TextView>(R.id.snackbar_text)
             .setTextColor(ContextCompat.getColor(this.activity!!, R.color.white))
-    snackbar.show()
+    snackbar.show()*/
 }
 
 // 扩展点击事件属性(重复点击时长)

@@ -6,9 +6,9 @@ import android.graphics.Color
 import android.util.AttributeSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import com.game.kotlin.sample.R
 import com.game.kotlin.sample.utils.ColorUtil
 import com.game.kotlin.sample.utils.SettingUtil
-import com.ninering.rocen.an.R
 
 /**
  * @description:

@@ -1,5 +1,7 @@
 package com.game.kotlin.sample.base
 
+import com.game.kotlin.sample.ext.showToast
+
 /**
  * @description:
  * @author:  xubp

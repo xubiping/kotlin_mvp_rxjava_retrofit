@@ -1,11 +1,20 @@
 package com.game.kotlin.sample.http
 
+import com.game.kotlin.sample.BuildConfig
+import com.game.kotlin.sample.api.ApiService
+import com.game.kotlin.sample.app.App
+import com.game.kotlin.sample.constant.Constant
+import com.game.kotlin.sample.constant.HttpConstant
+import com.game.kotlin.sample.http.interceptor.CacheInterceptor
+import com.game.kotlin.sample.http.interceptor.HeaderInterceptor
+import com.game.kotlin.sample.http.interceptor.SaveCookieInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 /**

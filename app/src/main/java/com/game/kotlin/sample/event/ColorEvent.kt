@@ -1,5 +1,7 @@
 package com.game.kotlin.sample.event
 
+import com.game.kotlin.sample.utils.SettingUtil
+
 /**
  * @description:
  * @author:  xubp

@@ -11,12 +11,13 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.afollestad.materialdialogs.color.CircleView
+import com.game.kotlin.sample.R
 import com.game.kotlin.sample.app.App
 import com.game.kotlin.sample.constant.Constant
 import com.game.kotlin.sample.event.NetworkChangeEvent
+import com.game.kotlin.sample.multipleview.MultipleStatusView
 import com.game.kotlin.sample.receiver.NetworkChangeReceiver
 import com.game.kotlin.sample.utils.*
-import com.ninering.rocen.an.R
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -63,7 +64,7 @@ abstract class BaseActivity : AppCompatActivity() {
     /**
      * 布局文件id
      */
-    protected abstract fun attachLayoutRes(): Int
+    //protected abstract fun attachLayoutRes(): Int
 
     /**
      * 初始化数据
@@ -101,7 +102,7 @@ abstract class BaseActivity : AppCompatActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         // AutoDensityUtil.setCustomDensity(this, App.instance)
         super.onCreate(savedInstanceState)
-        setContentView(attachLayoutRes())
+        //setContentView(attachLayoutRes())
         if (useEventBus()) {
             EventBus.getDefault().register(this)
         }
