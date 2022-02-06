@@ -64,7 +64,7 @@ abstract class BaseActivity : AppCompatActivity() {
     /**
      * 布局文件id
      */
-    //protected abstract fun attachLayoutRes(): Int
+    protected abstract fun attachLayoutRes(): Int
 
     /**
      * 初始化数据
@@ -102,7 +102,7 @@ abstract class BaseActivity : AppCompatActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         // AutoDensityUtil.setCustomDensity(this, App.instance)
         super.onCreate(savedInstanceState)
-        //setContentView(attachLayoutRes())
+        setContentView(attachLayoutRes())
         if (useEventBus()) {
             EventBus.getDefault().register(this)
         }

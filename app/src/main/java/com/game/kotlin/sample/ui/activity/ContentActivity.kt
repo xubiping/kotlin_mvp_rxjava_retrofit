@@ -60,7 +60,7 @@ class ContentActivity : BaseMvpSwipeBackActivity<ContentContract.View,ContentCon
     }
 
     override fun createPresenter(): ContentContract.Presenter = ContentPresenter()
-
+    override fun attachLayoutRes(): Int = R.layout.activity_content
     override fun initData() {
 
     }

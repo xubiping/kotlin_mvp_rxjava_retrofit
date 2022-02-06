@@ -17,6 +17,7 @@ class SplashActivity : BaseActivity() {
 
     lateinit var alphaAnimation: AlphaAnimation
     lateinit var binding: ActivitySplashBinding;
+    override fun attachLayoutRes(): Int = R.layout.activity_splash
     override fun initData() {
     }
 

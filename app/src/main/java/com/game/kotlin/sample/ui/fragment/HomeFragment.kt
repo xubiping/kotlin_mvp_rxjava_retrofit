@@ -26,6 +26,8 @@ import com.game.kotlin.sample.utils.ImageLoader
 import com.game.kotlin.sample.utils.NetWorkUtil
 import com.game.kotlin.sample.widget.SpaceItemDecoration
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.fragment_refresh_layout.*
+import kotlinx.android.synthetic.main.item_home_banner.*
 
 /**
  * @description:
@@ -33,8 +35,8 @@ import io.reactivex.Observable
  * @date :   2022/2/3 15:39
  */
 class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>(),HomeContract.View{
-    lateinit var binding:FragmentRefreshLayoutBinding
-    lateinit var itemHomeBannerBinding:ItemHomeBannerBinding
+    /*lateinit var binding:FragmentRefreshLayoutBinding
+    lateinit var itemHomeBannerBinding:ItemHomeBannerBinding*/
 
     companion object{
         fun getInstance():HomeFragment = HomeFragment()
@@ -50,7 +52,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
     /**
      * banner viw
      */
-    private var bannerView:BGABanner? = null
+    private var bannerView:View? = null
 
     private val recyclerViewItemDecoration by lazy {
         activity?.let {
@@ -87,21 +89,23 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
     override fun attachLayoutRes():Int = R.layout.fragment_refresh_layout
     override fun initView(view: View) {
         super.initView(view)
-        binding = FragmentRefreshLayoutBinding.inflate(layoutInflater)
-        itemHomeBannerBinding = ItemHomeBannerBinding.inflate(layoutInflater)
-        mLayoutStatusView = binding.multipleStatusView
-        binding.swipeRefreshLayout.setOnRefreshListener {
+        /*binding = FragmentRefreshLayoutBinding.inflate(layoutInflater)
+        itemHomeBannerBinding = ItemHomeBannerBinding.inflate(layoutInflater)*/
+        //mLayoutStatusView = binding.root
+        mLayoutStatusView = multiple_status_view
+        swipeRefreshLayout.setOnRefreshListener {
             pageNum = 0
             mPresenter?.requestHomeData()
         }
-        binding.recyclerView.run {
+        recyclerView.run {
             layoutManager = linearLayoutManager
             adapter = homeAdapter
             itemAnimator = DefaultItemAnimator()
             recyclerViewItemDecoration?.let { addItemDecoration(it) }
         }
-        bannerView = itemHomeBannerBinding.banner
-        itemHomeBannerBinding.banner?.run {
+       // bannerView = itemHomeBannerBinding.root
+        bannerView = layoutInflater.inflate(R.layout.item_home_banner, null)
+        banner?.run {
             setDelegate(bannerDelegate)
         }
         homeAdapter.run {
@@ -115,7 +119,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
                 itemChildClick(item, view, position)
             }
             loadMoreModule.setOnLoadMoreListener {
-                binding.swipeRefreshLayout.isRefreshing = false
+                swipeRefreshLayout.isRefreshing = false
                 pageNum++
                 mPresenter?.requestArticles(pageNum)
             }
@@ -129,7 +133,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
     }
 
     override fun scrollToTop() {
-        binding.recyclerView.run {
+        recyclerView.run {
             if(linearLayoutManager.findFirstCompletelyVisibleItemPosition() >20){
                 scrollToPosition(0)
             }else{
@@ -143,7 +147,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
     }
 
     override fun hideLoading() {
-       binding.swipeRefreshLayout?.isRefreshing = false
+       swipeRefreshLayout?.isRefreshing = false
     }
 
     override fun showError(errorMsg: String) {
@@ -161,7 +165,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
                     bannerFeedList.add(list.imagePath)
                     bannerTitleList.add(list.title)
                 }
-        itemHomeBannerBinding.banner?.run{
+        banner?.run{
             setAutoPlayAble(bannerFeedList.size > 1)
             setData(bannerFeedList,bannerTitleList)
             setAdapter(bannerAdapter)

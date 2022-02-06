@@ -98,7 +98,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
      */
     private var nav_rank: ImageView? = null
 
-   // override fun attachLayoutRes(): Int = R.layout.activity_main
+    override fun attachLayoutRes(): Int = R.layout.activity_main
 
     override fun createPresenter(): MainContract.Presenter = MainPresenter()
 
@@ -140,7 +140,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         showFragment(mIndex)
 
         binding.floatingActionBtn.run {
-            setOnClickListener(onFABClickListener)
+           // setOnClickListener(onFABClickListener)
         }
 
     }
@@ -257,6 +257,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
                 toolbarBinding.toolbar.title = getString(R.string.app_name)
                 if(mHomeFragment == null){
                     mHomeFragment = HomeFragment.getInstance()
+                    transaction.add(R.id.container,mHomeFragment!!)
                 } else {
                     transaction.show(mHomeFragment!!)
                 }
