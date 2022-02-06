@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
+import com.game.kotlin.sample.databinding.FragmentRefreshLayoutBinding
 import com.game.kotlin.sample.widget.SpaceItemDecoration
 
 /**
@@ -12,8 +13,8 @@ import com.game.kotlin.sample.widget.SpaceItemDecoration
  * @author:  xubp
  * @date :   2022/1/23 15:04
  */
-abstract class BaseMvpListFragment {
-
+abstract class BaseMvpListFragment<in V : IView, P : IPresenter<V>> : BaseMvpFragment<V, P>() {
+    lateinit var binding: FragmentRefreshLayoutBinding
     /**
      * 每页数据的个数
      */
@@ -27,59 +28,59 @@ abstract class BaseMvpListFragment {
     /**
      * LinearLayoutManager
      */
-    /*protected val linearLayoutManager: LinearLayoutManager by lazy {
+    protected val linearLayoutManager: LinearLayoutManager by lazy {
         LinearLayoutManager(activity)
     }
 
-    *//**
+    /**
      * RecyclerView Divider
-     *//*
+     */
     private val recyclerViewItemDecoration by lazy {
         activity?.let {
             SpaceItemDecoration(it)
         }
     }
 
-    *//**
+    /**
      * RefreshListener
-     *//*
+     */
     protected val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
         pageNum = 0
         onRefreshList()
     }
 
-    *//**
+    /**
      * LoadMoreListener
-     *//*
+     */
     protected val onRequestLoadMoreListener = OnLoadMoreListener {
         pageNum++
-       // swipeRefreshLayout.isRefreshing = false
+        binding.swipeRefreshLayout.isRefreshing = false
         onLoadMoreList()
     }
 
-    *//**
+    /**
      * 下拉刷新
-     *//*
+     */
     abstract fun onRefreshList()
 
-    *//**
+    /**
      * 上拉加载更多
-     *//*
+     */
     abstract fun onLoadMoreList()
 
     override fun initView(view: View) {
         super.initView(view)
+        binding = FragmentRefreshLayoutBinding.inflate(layoutInflater)
+        mLayoutStatusView = binding.multipleStatusView
 
-        *//*mLayoutStatusView = multiple_status_view
-
-        swipeRefreshLayout.run {
+        binding.swipeRefreshLayout.run {
             setOnRefreshListener(onRefreshListener)
         }
-        recyclerView.run {
+        binding.recyclerView.run {
             layoutManager = linearLayoutManager
             itemAnimator = DefaultItemAnimator()
             recyclerViewItemDecoration?.let { addItemDecoration(it) }
-        }*//*
+        }
     }
 
     override fun showLoading() {
@@ -87,11 +88,11 @@ abstract class BaseMvpListFragment {
     }
 
     override fun hideLoading() {
-        //swipeRefreshLayout?.isRefreshing = false
+        binding.swipeRefreshLayout?.isRefreshing = false
     }
 
     override fun showError(errorMsg: String) {
         super.showError(errorMsg)
         mLayoutStatusView?.showError()
-    }*/
+    }
 }

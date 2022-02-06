@@ -9,12 +9,12 @@ import com.game.kotlin.sample.ext.showToast
  * @date :   2022/1/23 15:03
  */
 @Suppress("UNCHECKED_CAST")
-abstract class BaseMvpFragment {
+abstract class BaseMvpFragment<in V : IView, P : IPresenter<V>> : BaseFragment(), IView {
 
     /**
      * Presenter
      */
-    /*protected var mPresenter: P? = null
+    protected var mPresenter: P? = null
 
     protected abstract fun createPresenter(): P
 
@@ -45,6 +45,6 @@ abstract class BaseMvpFragment {
 
     override fun showMsg(msg: String) {
         showToast(msg)
-    }*/
+    }
 
 }
