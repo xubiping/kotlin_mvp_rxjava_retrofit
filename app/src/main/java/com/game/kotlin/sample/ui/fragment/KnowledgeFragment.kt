@@ -20,6 +20,7 @@ import com.game.kotlin.sample.mvp.presenter.KnowledgePresenter
 import com.game.kotlin.sample.ui.activity.ContentActivity
 import com.game.kotlin.sample.utils.NetWorkUtil
 import com.game.kotlin.sample.widget.SpaceItemDecoration
+import kotlinx.android.synthetic.main.fragment_refresh_layout.*
 
 /**
  * @description:
@@ -73,12 +74,12 @@ class KnowledgeFragment : BaseMvpListFragment<KnowledgeContract.View,KnowledgeCo
 
     override fun initView(view: View) {
         super.initView(view)
-        mLayoutStatusView = binding.multipleStatusView
+        mLayoutStatusView = multiple_status_view
         cid = arguments?.getInt(Constant.CONTENT_CID_KEY) ?: 0
-        binding.swipeRefreshLayout.run {
+        swipeRefreshLayout.run {
             setOnRefreshListener(onRefreshListener)
         }
-        binding.recyclerView.run {
+        recyclerView.run {
             layoutManager = linearLayoutManager
             adapter = mAdapter
             itemAnimator = DefaultItemAnimator()
@@ -133,7 +134,7 @@ class KnowledgeFragment : BaseMvpListFragment<KnowledgeContract.View,KnowledgeCo
     }
 
     override fun scrollToTop() {
-        binding.recyclerView.run {
+        recyclerView.run {
             if (linearLayoutManager.findFirstVisibleItemPosition() > 20) {
                 scrollToPosition(0)
             } else {

@@ -28,6 +28,7 @@ import com.game.kotlin.sample.widget.SpaceItemDecoration
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_refresh_layout.*
 import kotlinx.android.synthetic.main.item_home_banner.*
+import kotlinx.android.synthetic.main.item_home_banner.view.*
 
 /**
  * @description:
@@ -105,7 +106,8 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
         }
        // bannerView = itemHomeBannerBinding.root
         bannerView = layoutInflater.inflate(R.layout.item_home_banner, null)
-        banner?.run {
+
+        bannerView?.banner?.run {
             setDelegate(bannerDelegate)
         }
         homeAdapter.run {
@@ -165,7 +167,7 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
                     bannerFeedList.add(list.imagePath)
                     bannerTitleList.add(list.title)
                 }
-        banner?.run{
+        bannerView?.banner?.run{
             setAutoPlayAble(bannerFeedList.size > 1)
             setData(bannerFeedList,bannerTitleList)
             setAdapter(bannerAdapter)

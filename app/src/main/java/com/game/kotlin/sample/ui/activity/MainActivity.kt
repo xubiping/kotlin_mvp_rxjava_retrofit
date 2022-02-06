@@ -34,6 +34,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.navigation.NavigationView
 import com.tencent.bugly.beta.Beta
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -47,8 +49,8 @@ import org.w3c.dom.Text
  * @date :   2022/1/29 16:22
  */
 class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(), MainContract.View {
-    lateinit var binding:ActivityMainBinding
-    lateinit var toolbarBinding: ToolbarBinding
+    /* lateinit var binding:ActivityMainBinding
+     lateinit var toolbarBinding: ToolbarBinding*/
     private val BOTTOM_INDEX: String = "bottom_index"
 
     private val FRAGMENT_HOME = 0x01
@@ -116,7 +118,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     }
 
     override fun initView() {
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        /*binding = ActivityMainBinding.inflate(layoutInflater)
         toolbarBinding = ToolbarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -125,7 +127,13 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             setSupportActionBar(this)
         }
 
-        binding.bottomNavigation.run {
+        binding.bottomNavigation.run {*/
+        toolbar.run {
+            title = getString(R.string.app_name)
+            setSupportActionBar(this)
+        }
+
+        bottom_navigation.run {
             // 以前使用 BottomNavigationViewHelper.disableShiftMode(this) 方法来设置底部图标和字体都显示并去掉点击动画
             // 升级到 28.0.0 之后，官方重构了 BottomNavigationView ，目前可以使用 labelVisibilityMode = 1 来替代
             // BottomNavigationViewHelper.disableShiftMode(this)
@@ -139,9 +147,9 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
 
         showFragment(mIndex)
 
-        binding.floatingActionBtn.run {
-           // setOnClickListener(onFABClickListener)
-        }
+        /* binding.floatingActionBtn.run {
+            // setOnClickListener(onFABClickListener)
+         }*/
 
     }
 
@@ -159,14 +167,15 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
      * init NavigationView
      */
     private fun initNavView(){
-        binding.navView.run {
+        // binding.navView.run {
+        nav_view.run {
             setNavigationItemSelectedListener(onDrawerNavigationItemSelectedListener)
             nav_username = getHeaderView(0).findViewById(R.id.tv_username)
             nav_user_id = getHeaderView(0).findViewById(R.id.tv_user_id)
             nav_user_grade = getHeaderView(0).findViewById(R.id.tv_user_grade)
             nav_user_rank = getHeaderView(0).findViewById(R.id.tv_user_rank)
             nav_rank = getHeaderView(0).findViewById(R.id.iv_rank)
-            nav_score = MenuItemCompat.getActionView(binding.navView.menu.findItem(R.id.nav_score))as TextView
+            nav_score = MenuItemCompat.getActionView(nav_view.menu.findItem(R.id.nav_score))as TextView
             nav_score?.gravity = Gravity.CENTER_VERTICAL
             menu.findItem(R.id.nav_logout).isVisible = isLogin
         }
@@ -174,9 +183,9 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             text = if (!isLogin) getString(R.string.go_login) else username
             setOnClickListener {
                 if (!isLogin) {
-                   /* Intent(this@MainActivity, LoginActivity::class.java).run {
-                        startActivity(this)
-                    }*/
+                    /* Intent(this@MainActivity, LoginActivity::class.java).run {
+                         startActivity(this)
+                     }*/
                 }
             }
         }
@@ -208,12 +217,12 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     fun loginEvent(event: LoginEvent){
         if (event.isLogin) {
             nav_username?.text = username
-            binding.navView.menu.findItem(R.id.nav_logout).isVisible = true
+            nav_view.menu.findItem(R.id.nav_logout).isVisible = true
             mHomeFragment?.lazyLoad()
             mPresenter?.getUserInfo()
         } else {
             nav_username?.text = resources.getString(R.string.go_login)
-            binding.navView.menu.findItem(R.id.nav_logout).isVisible = false
+            nav_view.menu.findItem(R.id.nav_logout).isVisible = false
             mHomeFragment?.lazyLoad()
             // 重置用户信息
             nav_user_id?.text = getString(R.string.nav_line_4)
@@ -233,8 +242,8 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun refreshColor(event: ColorEvent) {
         if (event.isRefresh) {
-            binding.navView.getHeaderView(0).setBackgroundColor(mThemeColor)
-            binding.floatingActionBtn.backgroundTintList = ColorStateList.valueOf(mThemeColor)
+            nav_view.getHeaderView(0).setBackgroundColor(mThemeColor)
+            floating_action_btn.backgroundTintList = ColorStateList.valueOf(mThemeColor)
         }
     }
 
@@ -254,7 +263,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         when (index){
             FRAGMENT_HOME  // 首页
             ->{
-                toolbarBinding.toolbar.title = getString(R.string.app_name)
+                toolbar.title = getString(R.string.app_name)
                 if(mHomeFragment == null){
                     mHomeFragment = HomeFragment.getInstance()
                     transaction.add(R.id.container,mHomeFragment!!)
@@ -265,7 +274,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             }
             FRAGMENT_WECHAT // 公众号
             -> {
-                toolbarBinding.toolbar.title = getString(R.string.wechat)
+                toolbar.title = getString(R.string.wechat)
                 if (mWeChatFragment == null) {
                     mWeChatFragment = WeChatFragment.getInstance()
                     transaction.add(R.id.container, mWeChatFragment!!, "wechat")
@@ -281,9 +290,9 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
      */
     private fun hideFragments(transaction:FragmentTransaction){
         mHomeFragment?.let { transaction.hide(it) }
-       /* mSquareFragment?.let { transaction.hide(it) }
-        mSystemFragment?.let { transaction.hide(it) }
-        mProjectFragment?.let { transaction.hide(it) }*/
+        /* mSquareFragment?.let { transaction.hide(it) }
+         mSystemFragment?.let { transaction.hide(it) }
+         mProjectFragment?.let { transaction.hide(it) }*/
         mWeChatFragment?.let { transaction.hide(it) }
     }
 
@@ -389,7 +398,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
                 true
             }
     private fun goCommonActivity(type:String){
-       /* Intent(this@MainActivity,CommonA)*/
+        /* Intent(this@MainActivity,CommonA)*/
     }
     /**
      * 去登陆页面
@@ -465,15 +474,15 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             FRAGMENT_HOME -> {
                 mHomeFragment?.scrollToTop()
             }
-           /* FRAGMENT_SQUARE -> {
-                mSquareFragment?.scrollToTop()
-            }
-            FRAGMENT_SYSTEM -> {
-                mSystemFragment?.scrollToTop()
-            }
-            FRAGMENT_PROJECT -> {
-                mProjectFragment?.scrollToTop()
-            }*/
+            /* FRAGMENT_SQUARE -> {
+                 mSquareFragment?.scrollToTop()
+             }
+             FRAGMENT_SYSTEM -> {
+                 mSystemFragment?.scrollToTop()
+             }
+             FRAGMENT_PROJECT -> {
+                 mProjectFragment?.scrollToTop()
+             }*/
             FRAGMENT_WECHAT -> {
                 mWeChatFragment?.scrollToTop()
             }
@@ -481,20 +490,20 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         if (mIndex != FRAGMENT_SQUARE) {
-           // menuInflater.inflate(R.menu.menu_activity_main, menu)
+            // menuInflater.inflate(R.menu.menu_activity_main, menu)
         }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-       /* when (item.itemId) {
-            R.id.action_search -> {
-                Intent(this, SearchActivity::class.java).run {
-                    startActivity(this)
-                }
-                return true
-            }
-        }*/
+        /* when (item.itemId) {
+             R.id.action_search -> {
+                 Intent(this, SearchActivity::class.java).run {
+                     startActivity(this)
+                 }
+                 return true
+             }
+         }*/
         return super.onOptionsItemSelected(item)
     }
 
@@ -514,9 +523,9 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     override fun onDestroy() {
         super.onDestroy()
         mHomeFragment = null
-       /* mSquareFragment = null
-        mSystemFragment = null
-        mProjectFragment = null*/
+        /* mSquareFragment = null
+         mSystemFragment = null
+         mProjectFragment = null*/
         mWeChatFragment = null
     }
 

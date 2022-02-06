@@ -7,6 +7,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
 import com.game.kotlin.sample.databinding.FragmentRefreshLayoutBinding
 import com.game.kotlin.sample.widget.SpaceItemDecoration
+import kotlinx.android.synthetic.main.fragment_refresh_layout.*
 
 /**
  * @description:
@@ -14,7 +15,7 @@ import com.game.kotlin.sample.widget.SpaceItemDecoration
  * @date :   2022/1/23 15:04
  */
 abstract class BaseMvpListFragment<in V : IView, P : IPresenter<V>> : BaseMvpFragment<V, P>() {
-    lateinit var binding: FragmentRefreshLayoutBinding
+    //lateinit var binding: FragmentRefreshLayoutBinding
     /**
      * 每页数据的个数
      */
@@ -54,7 +55,7 @@ abstract class BaseMvpListFragment<in V : IView, P : IPresenter<V>> : BaseMvpFra
      */
     protected val onRequestLoadMoreListener = OnLoadMoreListener {
         pageNum++
-        binding.swipeRefreshLayout.isRefreshing = false
+        swipeRefreshLayout.isRefreshing = false
         onLoadMoreList()
     }
 
@@ -70,13 +71,13 @@ abstract class BaseMvpListFragment<in V : IView, P : IPresenter<V>> : BaseMvpFra
 
     override fun initView(view: View) {
         super.initView(view)
-        binding = FragmentRefreshLayoutBinding.inflate(layoutInflater)
-        mLayoutStatusView = binding.multipleStatusView
+        //binding = FragmentRefreshLayoutBinding.inflate(layoutInflater)
+        mLayoutStatusView = multiple_status_view
 
-        binding.swipeRefreshLayout.run {
+        swipeRefreshLayout.run {
             setOnRefreshListener(onRefreshListener)
         }
-        binding.recyclerView.run {
+        recyclerView.run {
             layoutManager = linearLayoutManager
             itemAnimator = DefaultItemAnimator()
             recyclerViewItemDecoration?.let { addItemDecoration(it) }
@@ -88,7 +89,7 @@ abstract class BaseMvpListFragment<in V : IView, P : IPresenter<V>> : BaseMvpFra
     }
 
     override fun hideLoading() {
-        binding.swipeRefreshLayout?.isRefreshing = false
+        swipeRefreshLayout?.isRefreshing = false
     }
 
     override fun showError(errorMsg: String) {
