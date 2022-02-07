@@ -36,11 +36,12 @@ import kotlin.properties.Delegates
  */
 class App : Application() {
 
-    private var refWatcher: RefWatcher? = null
+    private var refWatcher: RefWatcher? = null//监控内存
 
     companion object {
         val TAG = "wan_android"
 
+        //Kotlin 标准库中所提供的最后一个内建代理是 Delegates.notNull()。notNull() 容许一个属性能够延后一段时间初始化，与 lateinit 相似。因为 notNull() 会为每一个属性建立额外的对象，因此大多数状况下推荐使用 lateinit。不过，您能够将 notNull() 与原生类型一同使用，这点是 lateinit 所不支持的
         var context: Context by Delegates.notNull()
             private set
 
@@ -201,7 +202,7 @@ class App : Application() {
      * 初始化配置
      */
     private fun initConfig() {
-        val formatStrategy = PrettyFormatStrategy.newBuilder()
+        val formatStrategy = PrettyFormatStrategy.newBuilder()//设置logger 信息
                 .showThreadInfo(false)  // 隐藏线程信息 默认：显示
                 .methodCount(0)         // 决定打印多少行（每一行代表一个方法）默认：2
                 .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
