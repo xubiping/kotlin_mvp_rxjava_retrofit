@@ -57,10 +57,50 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.game.kotlin.sample.ui.activity.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.ContentActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.KnowledgeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.CommonActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.setting.SettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.SearchActivity"
+            android:screenOrientation="portrait"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name="com.tencent.bugly.beta.ui.BetaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|locale"
+            android:theme="@android:style/Theme.Translucent"
+            android:screenOrientation="portrait"/>
+
+        <receiver android:name=".receiver.NetworkChangeReceiver" />
+
+        <activity android:name=".ui.activity.TodoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.ScoreActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.RankActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.ShareActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

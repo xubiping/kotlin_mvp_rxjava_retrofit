@@ -25,8 +25,8 @@ import com.game.kotlin.sample.ext.showToast
 import com.game.kotlin.sample.mvp.contract.MainContract
 import com.game.kotlin.sample.mvp.model.bean.UserInfoBody
 import com.game.kotlin.sample.mvp.presenter.MainPresenter
-import com.game.kotlin.sample.ui.fragment.HomeFragment
-import com.game.kotlin.sample.ui.fragment.WeChatFragment
+import com.game.kotlin.sample.ui.fragment.*
+import com.game.kotlin.sample.ui.setting.SettingActivity
 import com.game.kotlin.sample.utils.DialogUtil
 import com.game.kotlin.sample.utils.Preference
 import com.game.kotlin.sample.utils.SettingUtil
@@ -49,8 +49,7 @@ import org.w3c.dom.Text
  * @date :   2022/1/29 16:22
  */
 class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(), MainContract.View {
-    /* lateinit var binding:ActivityMainBinding
-     lateinit var toolbarBinding: ToolbarBinding*/
+
     private val BOTTOM_INDEX: String = "bottom_index"
 
     private val FRAGMENT_HOME = 0x01
@@ -60,8 +59,12 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     private val FRAGMENT_PROJECT = 0x05
 
     private var mIndex = FRAGMENT_HOME
+
     private var mHomeFragment: HomeFragment? = null
+    private var mSquareFragment: SquareFragment? = null
     private var mWeChatFragment: WeChatFragment? = null
+    private var mSystemFragment: SystemFragment? = null
+    private var mProjectFragment: ProjectFragment? = null
 
     private var mExitTime: Long = 0
 
@@ -107,27 +110,18 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     override fun useEventBus(): Boolean = true
 
     override fun initData() {
-        //Beta.checkAppUpgrade(false,false)
+        Beta.checkUpgrade(false, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mIndex = savedInstanceState?.getInt(BOTTOM_INDEX)
         }
         super.onCreate(savedInstanceState)
     }
 
     override fun initView() {
-        /*binding = ActivityMainBinding.inflate(layoutInflater)
-        toolbarBinding = ToolbarBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        toolbarBinding.toolbar.run {
-            title = getString(R.string.app_name)
-            setSupportActionBar(this)
-        }
-
-        binding.bottomNavigation.run {*/
+        super.initView()
         toolbar.run {
             title = getString(R.string.app_name)
             setSupportActionBar(this)
@@ -147,10 +141,9 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
 
         showFragment(mIndex)
 
-        /* binding.floatingActionBtn.run {
-            // setOnClickListener(onFABClickListener)
-         }*/
-
+        floating_action_btn.run {
+            setOnClickListener(onFABClickListener)
+        }
     }
 
     override fun start() {
@@ -166,8 +159,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     /**
      * init NavigationView
      */
-    private fun initNavView(){
-        // binding.navView.run {
+    private fun initNavView() {
         nav_view.run {
             setNavigationItemSelectedListener(onDrawerNavigationItemSelectedListener)
             nav_username = getHeaderView(0).findViewById(R.id.tv_username)
@@ -175,7 +167,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             nav_user_grade = getHeaderView(0).findViewById(R.id.tv_user_grade)
             nav_user_rank = getHeaderView(0).findViewById(R.id.tv_user_rank)
             nav_rank = getHeaderView(0).findViewById(R.id.iv_rank)
-            nav_score = MenuItemCompat.getActionView(nav_view.menu.findItem(R.id.nav_score))as TextView
+            nav_score = MenuItemCompat.getActionView(nav_view.menu.findItem(R.id.nav_score)) as TextView
             nav_score?.gravity = Gravity.CENTER_VERTICAL
             menu.findItem(R.id.nav_logout).isVisible = isLogin
         }
@@ -183,27 +175,42 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             text = if (!isLogin) getString(R.string.go_login) else username
             setOnClickListener {
                 if (!isLogin) {
-                     Intent(this@MainActivity, LoginActivity::class.java).run {
-                         startActivity(this)
-                     }
+                    Intent(this@MainActivity, LoginActivity::class.java).run {
+                        startActivity(this)
+                    }
                 }
             }
         }
-        nav_rank?.setOnClickListener{
+        nav_rank?.setOnClickListener {
             startActivity(Intent(this@MainActivity, RankActivity::class.java))
         }
     }
 
-    private fun initDrawerLayout(){
-        /*binding.run {
-            val toggle = ActionBarDrawerToggle(this@MainActivity,binding.drawerLayout,toolbarBinding.toolbar, R.string.navigation_drawer_open,
+    /**
+     * init DrawerLayout
+     */
+    private fun initDrawerLayout() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            var params = window.attributes
+//            params.flags = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+//            drawer_layout.fitsSystemWindows = true
+//            drawer_layout.clipToPadding = false
+//        }
+        drawer_layout.run {
+            val toggle = ActionBarDrawerToggle(
+                    this@MainActivity,
+                    this,
+                    toolbar, R.string.navigation_drawer_open,
                     R.string.navigation_drawer_close
             )
             addDrawerListener(toggle)
             toggle.syncState()
-        }*/
+        }
     }
 
+    /**
+     * 显示用户信息，包括积分、等级、排名
+     */
     override fun showUserInfo(bean: UserInfoBody) {
         App.userInfo = bean
 
@@ -214,7 +221,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun loginEvent(event: LoginEvent){
+    fun loginEvent(event: LoginEvent) {
         if (event.isLogin) {
             nav_username?.text = username
             nav_view.menu.findItem(R.id.nav_logout).isVisible = true
@@ -260,17 +267,47 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         val transaction = supportFragmentManager.beginTransaction()
         hideFragments(transaction)
         mIndex = index
-        when (index){
-            FRAGMENT_HOME  // 首页
-            ->{
+        when (index) {
+            FRAGMENT_HOME // 首页
+            -> {
                 toolbar.title = getString(R.string.app_name)
-                if(mHomeFragment == null){
+                if (mHomeFragment == null) {
                     mHomeFragment = HomeFragment.getInstance()
-                    transaction.add(R.id.container,mHomeFragment!!)
+                    transaction.add(R.id.container, mHomeFragment!!, "home")
+
                 } else {
                     transaction.show(mHomeFragment!!)
                 }
-
+            }
+            FRAGMENT_SQUARE  // 广场
+            -> {
+                toolbar.title = getString(R.string.square)
+                if (mSquareFragment == null) {
+                    mSquareFragment = SquareFragment.getInstance()
+                    transaction.add(R.id.container, mSquareFragment!!, "square")
+                } else {
+                    transaction.show(mSquareFragment!!)
+                }
+            }
+            FRAGMENT_SYSTEM // 体系
+            -> {
+                toolbar.title = getString(R.string.knowledge_system)
+                if (mSystemFragment == null) {
+                    mSystemFragment = SystemFragment.getInstance()
+                    transaction.add(R.id.container, mSystemFragment!!, "system")
+                } else {
+                    transaction.show(mSystemFragment!!)
+                }
+            }
+            FRAGMENT_PROJECT // 项目
+            -> {
+                toolbar.title = getString(R.string.project)
+                if (mProjectFragment == null) {
+                    mProjectFragment = ProjectFragment.getInstance()
+                    transaction.add(R.id.container, mProjectFragment!!, "project")
+                } else {
+                    transaction.show(mProjectFragment!!)
+                }
             }
             FRAGMENT_WECHAT // 公众号
             -> {
@@ -285,14 +322,15 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         }
         transaction.commit()
     }
+
     /**
      * 隐藏所有的Fragment
      */
-    private fun hideFragments(transaction:FragmentTransaction){
+    private fun hideFragments(transaction: androidx.fragment.app.FragmentTransaction) {
         mHomeFragment?.let { transaction.hide(it) }
-        /* mSquareFragment?.let { transaction.hide(it) }
-         mSystemFragment?.let { transaction.hide(it) }
-         mProjectFragment?.let { transaction.hide(it) }*/
+        mSquareFragment?.let { transaction.hide(it) }
+        mSystemFragment?.let { transaction.hide(it) }
+        mProjectFragment?.let { transaction.hide(it) }
         mWeChatFragment?.let { transaction.hide(it) }
     }
 
@@ -306,7 +344,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
                         showFragment(FRAGMENT_HOME)
                         true
                     }
-                    /*R.id.action_square -> {
+                    R.id.action_square -> {
                         showFragment(FRAGMENT_SQUARE)
                         true
                     }
@@ -317,7 +355,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
                     R.id.action_project -> {
                         showFragment(FRAGMENT_PROJECT)
                         true
-                    }*/
+                    }
                     R.id.action_wechat -> {
                         showFragment(FRAGMENT_WECHAT)
                         true
@@ -328,13 +366,14 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
 
                 }
             }
+
     /**
      * NavigationView 监听
      */
     private val onDrawerNavigationItemSelectedListener =
             NavigationView.OnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
-                    /*R.id.nav_score -> {
+                    R.id.nav_score -> {
                         if (isLogin) {
                             Intent(this@MainActivity, ScoreActivity::class.java).run {
                                 startActivity(this)
@@ -392,21 +431,26 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
                             showToast(resources.getString(R.string.login_tint))
                             goLogin()
                         }
-                    }*/
+                    }
                 }
                 // drawer_layout.closeDrawer(GravityCompat.START)
                 true
             }
-    private fun goCommonActivity(type:String){
-        /* Intent(this@MainActivity,CommonA)*/
+
+    private fun goCommonActivity(type: String) {
+        Intent(this@MainActivity, CommonActivity::class.java).run {
+            putExtra(Constant.TYPE_KEY, type)
+            startActivity(this)
+        }
     }
+
     /**
      * 去登陆页面
      */
     private fun goLogin() {
-        /*Intent(this@MainActivity, LoginActivity::class.java).run {
+        Intent(this@MainActivity, LoginActivity::class.java).run {
             startActivity(this)
-        }*/
+        }
     }
 
     override fun recreate() {
@@ -415,7 +459,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             if (mHomeFragment != null) {
                 fragmentTransaction.remove(mHomeFragment!!)
             }
-            /*if (mSquareFragment != null) {
+            if (mSquareFragment != null) {
                 fragmentTransaction.remove(mSquareFragment!!)
             }
             if (mSystemFragment != null) {
@@ -423,7 +467,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             }
             if (mProjectFragment != null) {
                 fragmentTransaction.remove(mProjectFragment!!)
-            }*/
+            }
             if (mWeChatFragment != null) {
                 fragmentTransaction.remove(mWeChatFragment!!)
             }
@@ -433,11 +477,12 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
         }
         super.recreate()
     }
+
     /**
      * 退出登录 Dialog
      */
     private val mDialog by lazy {
-        DialogUtil.getWaitDialog(this,resources.getString(R.string.logout_ing))
+        DialogUtil.getWaitDialog(this@MainActivity, resources.getString(R.string.logout_ing))
     }
 
     /**
@@ -466,6 +511,7 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             }
         }
     }
+
     /**
      * FAB 监听
      */
@@ -474,36 +520,37 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             FRAGMENT_HOME -> {
                 mHomeFragment?.scrollToTop()
             }
-            /* FRAGMENT_SQUARE -> {
-                 mSquareFragment?.scrollToTop()
-             }
-             FRAGMENT_SYSTEM -> {
-                 mSystemFragment?.scrollToTop()
-             }
-             FRAGMENT_PROJECT -> {
-                 mProjectFragment?.scrollToTop()
-             }*/
+            FRAGMENT_SQUARE -> {
+                mSquareFragment?.scrollToTop()
+            }
+            FRAGMENT_SYSTEM -> {
+                mSystemFragment?.scrollToTop()
+            }
+            FRAGMENT_PROJECT -> {
+                mProjectFragment?.scrollToTop()
+            }
             FRAGMENT_WECHAT -> {
                 mWeChatFragment?.scrollToTop()
             }
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         if (mIndex != FRAGMENT_SQUARE) {
-            // menuInflater.inflate(R.menu.menu_activity_main, menu)
+            menuInflater.inflate(R.menu.menu_activity_main, menu)
         }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        /* when (item.itemId) {
-             R.id.action_search -> {
-                 Intent(this, SearchActivity::class.java).run {
-                     startActivity(this)
-                 }
-                 return true
-             }
-         }*/
+        when (item.itemId) {
+            R.id.action_search -> {
+                Intent(this, SearchActivity::class.java).run {
+                    startActivity(this)
+                }
+                return true
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -523,9 +570,9 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
     override fun onDestroy() {
         super.onDestroy()
         mHomeFragment = null
-        /* mSquareFragment = null
-         mSystemFragment = null
-         mProjectFragment = null*/
+        mSquareFragment = null
+        mSystemFragment = null
+        mProjectFragment = null
         mWeChatFragment = null
     }
 

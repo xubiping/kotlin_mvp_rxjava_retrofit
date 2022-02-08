@@ -22,6 +22,7 @@ import com.game.kotlin.sample.mvp.model.bean.ArticleResponseBody
 import com.game.kotlin.sample.mvp.model.bean.Banner
 import com.game.kotlin.sample.mvp.presenter.HomePresenter
 import com.game.kotlin.sample.ui.activity.ContentActivity
+import com.game.kotlin.sample.ui.activity.LoginActivity
 import com.game.kotlin.sample.utils.ImageLoader
 import com.game.kotlin.sample.utils.NetWorkUtil
 import com.game.kotlin.sample.widget.SpaceItemDecoration
@@ -35,12 +36,10 @@ import kotlinx.android.synthetic.main.item_home_banner.view.*
  * @author:  xubp
  * @date :   2022/2/3 15:39
  */
-class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>(),HomeContract.View{
-    /*lateinit var binding:FragmentRefreshLayoutBinding
-    lateinit var itemHomeBannerBinding:ItemHomeBannerBinding*/
+class HomeFragment : BaseMvpFragment<HomeContract.View, HomeContract.Presenter>(), HomeContract.View {
 
-    companion object{
-        fun getInstance():HomeFragment = HomeFragment()
+    companion object {
+        fun getInstance(): HomeFragment = HomeFragment()
     }
 
     override fun createPresenter(): HomePresenter = HomePresenter()
@@ -48,29 +47,34 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
     /**
      * banner datas
      */
-    private lateinit var bannerDatas:ArrayList<Banner>
+    private lateinit var bannerDatas: ArrayList<Banner>
 
     /**
-     * banner viw
+     * banner view
      */
-    private var bannerView:View? = null
+    private var bannerView: View? = null
 
+    /**
+     * RecyclerView Divider
+     */
     private val recyclerViewItemDecoration by lazy {
         activity?.let {
             SpaceItemDecoration(it)
         }
     }
 
-    private val homeAdapter:HomeAdapter by lazy {
+    /**
+     * Home Adapter
+     */
+    private val homeAdapter: HomeAdapter by lazy {
         HomeAdapter()
     }
 
     /**
      * Banner Adapter
      */
-    private val bannerAdapter:BGABanner.Adapter<ImageView,String> by lazy {
-        BGABanner.Adapter<ImageView,String>{
-            bgaBanner, imageView, feedImageUrl, position ->
+    private val bannerAdapter: BGABanner.Adapter<ImageView, String> by lazy {
+        BGABanner.Adapter<ImageView, String> { bgaBanner, imageView, feedImageUrl, position ->
             ImageLoader.load(activity, feedImageUrl, imageView)
         }
     }
@@ -87,12 +91,20 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
      */
     private var pageNum = 0
 
-    override fun attachLayoutRes():Int = R.layout.fragment_refresh_layout
+    override fun attachLayoutRes(): Int = R.layout.fragment_refresh_layout
+
+    override fun scrollToTop() {
+        recyclerView.run {
+            if (linearLayoutManager.findFirstVisibleItemPosition() > 20) {
+                scrollToPosition(0)
+            } else {
+                smoothScrollToPosition(0)
+            }
+        }
+    }
+
     override fun initView(view: View) {
         super.initView(view)
-        /*binding = FragmentRefreshLayoutBinding.inflate(layoutInflater)
-        itemHomeBannerBinding = ItemHomeBannerBinding.inflate(layoutInflater)*/
-        //mLayoutStatusView = binding.root
         mLayoutStatusView = multiple_status_view
         swipeRefreshLayout.setOnRefreshListener {
             pageNum = 0
@@ -104,12 +116,12 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
             itemAnimator = DefaultItemAnimator()
             recyclerViewItemDecoration?.let { addItemDecoration(it) }
         }
-       // bannerView = itemHomeBannerBinding.root
-        bannerView = layoutInflater.inflate(R.layout.item_home_banner, null)
 
+        bannerView = layoutInflater.inflate(R.layout.item_home_banner, null)
         bannerView?.banner?.run {
             setDelegate(bannerDelegate)
         }
+
         homeAdapter.run {
             addHeaderView(bannerView!!)
             setOnItemClickListener { adapter, view, position ->
@@ -126,7 +138,6 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
                 mPresenter?.requestArticles(pageNum)
             }
         }
-
     }
 
     override fun lazyLoad() {
@@ -134,22 +145,11 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
         mPresenter?.requestHomeData()
     }
 
-    override fun scrollToTop() {
-        recyclerView.run {
-            if(linearLayoutManager.findFirstCompletelyVisibleItemPosition() >20){
-                scrollToPosition(0)
-            }else{
-                smoothScrollToPosition(0)
-            }
-        }
-    }
-
     override fun showLoading() {
-
     }
 
     override fun hideLoading() {
-       swipeRefreshLayout?.isRefreshing = false
+        swipeRefreshLayout?.isRefreshing = false
     }
 
     override fun showError(errorMsg: String) {
@@ -162,21 +162,20 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
         val bannerFeedList = ArrayList<String>()
         val bannerTitleList = ArrayList<String>()
         Observable.fromIterable(banners)
-                .subscribe{
-                    list ->
+                .subscribe { list ->
                     bannerFeedList.add(list.imagePath)
                     bannerTitleList.add(list.title)
                 }
-        bannerView?.banner?.run{
+        bannerView?.banner?.run {
             setAutoPlayAble(bannerFeedList.size > 1)
-            setData(bannerFeedList,bannerTitleList)
+            setData(bannerFeedList, bannerTitleList)
             setAdapter(bannerAdapter)
         }
     }
 
     override fun setArticles(articles: ArticleResponseBody) {
-        homeAdapter.setNewOrAddData(pageNum == 0,articles.datas)
-        if(homeAdapter.data.isEmpty()){
+        homeAdapter.setNewOrAddData(pageNum == 0, articles.datas)
+        if (homeAdapter.data.isEmpty()) {
             mLayoutStatusView?.showEmpty()
         } else {
             mLayoutStatusView?.showContent()
@@ -184,19 +183,22 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
     }
 
     override fun showCollectSuccess(success: Boolean) {
-        if(success){
+        if (success) {
             showToast(resources.getString(R.string.collect_success))
         }
     }
 
     override fun showCancelCollectSuccess(success: Boolean) {
-        if(success){
+        if (success) {
             showToast(resources.getString(R.string.cancel_collect_success))
         }
     }
 
-    private fun itemClick(item:Article){
-        ContentActivity.start(activity,item.id,item.title,item.link)
+    /**
+     * Item Click
+     */
+    private fun itemClick(item: Article) {
+        ContentActivity.start(activity, item.id, item.title, item.link)
     }
 
     /**
@@ -222,9 +224,9 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
                         mPresenter?.addCollectArticle(item.id)
                     }
                 } else {
-                    /*Intent(activity, LoginActivity::class.java).run {
+                    Intent(activity, LoginActivity::class.java).run {
                         startActivity(this)
-                    }*/
+                    }
                     showToast(resources.getString(R.string.login_tint))
                 }
             }
@@ -234,11 +236,10 @@ class HomeFragment : BaseMvpFragment<HomeContract.View,HomeContract.Presenter>()
     /**
      * BannerClickListener
      */
-    private val bannerDelegate = BGABanner.Delegate<ImageView,String>{
-        banner, itemView, model, position ->
-        if(bannerDatas.size>0){
+    private val bannerDelegate = BGABanner.Delegate<ImageView, String> { banner, imageView, model, position ->
+        if (bannerDatas.size > 0) {
             val data = bannerDatas[position]
-            ContentActivity.start(activity,data.id,data.title,data.url)
+            ContentActivity.start(activity, data.id, data.title, data.url)
         }
     }
 }

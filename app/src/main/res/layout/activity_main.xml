@@ -50,5 +50,5 @@
         app:itemIconTint="@color/item_nav_color_tv"
         app:itemTextColor="@color/item_nav_color_tv"
         app:menu="@menu/nav_menu"
-        android:visibility="gone"/>
+        />
 </androidx.drawerlayout.widget.DrawerLayout>

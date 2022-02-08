@@ -4,6 +4,7 @@ import com.game.kotlin.sample.R
 import com.game.kotlin.sample.base.BaseSwipeBackActivity
 import com.game.kotlin.sample.constant.Constant
 import com.game.kotlin.sample.event.ColorEvent
+import com.game.kotlin.sample.ui.fragment.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
 

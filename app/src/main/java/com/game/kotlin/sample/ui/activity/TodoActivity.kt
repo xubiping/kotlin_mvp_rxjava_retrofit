@@ -12,10 +12,11 @@ import com.game.kotlin.sample.event.ColorEvent
 import com.game.kotlin.sample.event.TodoEvent
 import com.game.kotlin.sample.event.TodoTypeEvent
 import com.game.kotlin.sample.mvp.model.bean.TodoTypeBean
+import com.game.kotlin.sample.ui.fragment.TodoFragment
 import com.game.kotlin.sample.utils.DisplayManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.game.kotlin.sample.mvp.model.bean.ProjectTreeBean
+import com.game.kotlin.sample.ui.fragment.ProjectListFragment
 
 /**
  * @description:
