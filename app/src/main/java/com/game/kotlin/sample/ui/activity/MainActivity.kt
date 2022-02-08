@@ -183,14 +183,14 @@ class MainActivity : BaseMvpActivity<MainContract.View, MainContract.Presenter>(
             text = if (!isLogin) getString(R.string.go_login) else username
             setOnClickListener {
                 if (!isLogin) {
-                    /* Intent(this@MainActivity, LoginActivity::class.java).run {
+                     Intent(this@MainActivity, LoginActivity::class.java).run {
                          startActivity(this)
-                     }*/
+                     }
                 }
             }
         }
         nav_rank?.setOnClickListener{
-            //startActivity(Intent(this@MainActivity, RankActivity::class.java))
+            startActivity(Intent(this@MainActivity, RankActivity::class.java))
         }
     }
 

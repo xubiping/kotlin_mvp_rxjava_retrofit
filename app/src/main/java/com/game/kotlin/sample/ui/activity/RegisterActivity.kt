@@ -7,21 +7,21 @@ import com.game.kotlin.sample.base.BaseMvpActivity
 import com.game.kotlin.sample.constant.Constant
 import com.game.kotlin.sample.event.LoginEvent
 import com.game.kotlin.sample.ext.showToast
-import com.game.kotlin.sample.mvp.contract.LoginContract
+import com.game.kotlin.sample.mvp.contract.RegisterContract
 import com.game.kotlin.sample.mvp.model.bean.LoginData
-import com.game.kotlin.sample.mvp.presenter.LoginPresenter
+import com.game.kotlin.sample.mvp.presenter.RegisterPresenter
 import com.game.kotlin.sample.utils.DialogUtil
 import com.game.kotlin.sample.utils.Preference
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
 
 /**
  * @description:
  * @author:  xubp
- * @date :   2022/2/7 17:32
+ * @date :   2022/2/7 21:37
  */
-class LoginActivity : BaseMvpActivity<LoginContract.View, LoginContract.Presenter>(), LoginContract.View {
+class RegisterActivity : BaseMvpActivity<RegisterContract.View, RegisterContract.Presenter>(), RegisterContract.View {
 
     /**
      * local username
@@ -33,16 +33,10 @@ class LoginActivity : BaseMvpActivity<LoginContract.View, LoginContract.Presente
      */
     private var pwd: String by Preference(Constant.PASSWORD_KEY, "")
 
-    /**
-     * token
-     */
-    private var token: String by Preference(Constant.TOKEN_KEY, "")
-
-
-    override fun createPresenter(): LoginContract.Presenter = LoginPresenter()
+    override fun createPresenter(): RegisterContract.Presenter = RegisterPresenter()
 
     private val mDialog by lazy {
-        DialogUtil.getWaitDialog(this, getString(R.string.login_ing))
+        DialogUtil.getWaitDialog(this, getString(R.string.register_ing))
     }
 
     override fun showLoading() {
@@ -53,7 +47,21 @@ class LoginActivity : BaseMvpActivity<LoginContract.View, LoginContract.Presente
         mDialog.dismiss()
     }
 
-    override fun attachLayoutRes(): Int = R.layout.activity_login
+    override fun registerSuccess(data: LoginData) {
+        showToast(getString(R.string.register_success))
+        isLogin = true
+        user = data.username
+        pwd = data.password
+
+        EventBus.getDefault().post(LoginEvent(true))
+        finish()
+    }
+
+    override fun registerFail() {
+        isLogin = false
+    }
+
+    override fun attachLayoutRes(): Int = R.layout.activity_register
 
     override fun useEventBus(): Boolean = false
 
@@ -65,31 +73,16 @@ class LoginActivity : BaseMvpActivity<LoginContract.View, LoginContract.Presente
     override fun initView() {
         super.initView()
 
-        et_username.setText(user)
         toolbar.run {
-            title = resources.getString(R.string.login)
+            title = resources.getString(R.string.register)
             setSupportActionBar(this)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
-        btn_login.setOnClickListener(onClickListener)
-        tv_sign_up.setOnClickListener(onClickListener)
+        btn_register.setOnClickListener(onClickListener)
+        tv_sign_in.setOnClickListener(onClickListener)
     }
 
     override fun start() {
-    }
-
-    override fun loginSuccess(data: LoginData) {
-        showToast(getString(R.string.login_success))
-        isLogin = true
-        user = data.username
-        pwd = data.password
-        token = data.token
-
-        EventBus.getDefault().post(LoginEvent(true))
-        finish()
-    }
-
-    override fun loginFail() {
     }
 
     /**
@@ -97,12 +90,13 @@ class LoginActivity : BaseMvpActivity<LoginContract.View, LoginContract.Presente
      */
     private val onClickListener = View.OnClickListener { view ->
         when (view.id) {
-            R.id.btn_login -> {
-                login()
+            R.id.btn_register -> {
+                register()
             }
-            R.id.tv_sign_up -> {
-                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
-                startActivity(intent)
+            R.id.tv_sign_in -> {
+                Intent(this@RegisterActivity, LoginActivity::class.java).apply {
+                    startActivity(this)
+                }
                 finish()
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
@@ -110,22 +104,24 @@ class LoginActivity : BaseMvpActivity<LoginContract.View, LoginContract.Presente
     }
 
     /**
-     * Login
+     * Register
      */
-    private fun login() {
+    private fun register() {
         if (validate()) {
-            mPresenter?.loginWanAndroid(et_username.text.toString(), et_password.text.toString())
+            mPresenter?.registerWanAndroid(et_username.text.toString(),
+                    et_password.text.toString(),
+                    et_password2.text.toString())
         }
     }
 
     /**
-     * Check UserName and PassWord
+     * check data
      */
     private fun validate(): Boolean {
         var valid = true
         val username: String = et_username.text.toString()
         val password: String = et_password.text.toString()
-
+        val password2: String = et_password2.text.toString()
         if (username.isEmpty()) {
             et_username.error = getString(R.string.username_not_empty)
             valid = false
@@ -134,8 +130,15 @@ class LoginActivity : BaseMvpActivity<LoginContract.View, LoginContract.Presente
             et_password.error = getString(R.string.password_not_empty)
             valid = false
         }
+        if (password2.isEmpty()) {
+            et_password2.error = getString(R.string.confirm_password_not_empty)
+            valid = false
+        }
+        if (password != password2) {
+            et_password2.error = getString(R.string.password_cannot_match)
+            valid = false
+        }
         return valid
-
     }
 
 }
