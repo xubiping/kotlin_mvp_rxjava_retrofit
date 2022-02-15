@@ -40,7 +40,7 @@
         <!--android:title="@string/choose_icon"-->
         <!--app:iconsDrawables="@array/iconsDrawables"/>-->
 
-        <com.cxz.wanandroid.widget.IconPreference
+        <com.game.kotlin.sample.widget.IconPreference
             android:key="color"
             android:layout="@layout/custom_preference_layout"
             android:summary="@string/choose_theme_color_summary"

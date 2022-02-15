@@ -8,7 +8,6 @@ import com.afollestad.materialdialogs.color.ColorChooserDialog
 import com.game.kotlin.sample.R
 import com.game.kotlin.sample.base.BaseSwipeBackActivity
 import com.game.kotlin.sample.event.ColorEvent
-import com.game.kotlin.sample.ui.fragment.SettingFragment
 import com.game.kotlin.sample.utils.SettingUtil
 import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.EventBus
